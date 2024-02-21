@@ -1,24 +1,19 @@
-# wms-web
+# 仓库库管理系统前端
 
-## Project setup
-```
-npm install
-```
+set on **2024.2.21**
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
++ 一个前后端分离项目的前端部分，参考了b站同名项目，实现仓库以及相应人员管理管理，此部分基本与源项目一致
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+# 主要技术使用：
++ vue
++ Element-ui
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 更新日志
+
+## 2024.2.21
+第一次推送
++ 初步实现头部界面的开发
++ 侧边导航栏的伸缩
++ 用户分页展示
+
