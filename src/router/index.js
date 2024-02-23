@@ -1,4 +1,5 @@
 import VueRouter from "vue-router";
+import Vue from "vue";
 
 const routes=[
     {
@@ -9,7 +10,25 @@ const routes=[
     {
         path:'/Index',
         name:'index',
-        component:()=>import("../components/Index")
+        component:()=>import("../components/Index"),
+        children:[
+            {
+                path:'/Home',
+                name:'/Home',
+                meta: {
+                    title: '首页'
+                },
+                component:()=>import("../components/Home.vue")
+            },
+            {
+                path:'/Admin',
+                name:'/Admin',
+                meta: {
+                    title: '用户管理'
+                },
+                component:()=>import("../components/Admin/UserManage.vue")
+            }
+        ]
     }
 ]
 
@@ -19,5 +38,8 @@ const router =new VueRouter(
         routes
     }
 )
-
+const VueRouterPush = VueRouter.prototype.push
+    VueRouter.prototype.push=function push(to){
+    return VueRouterPush.call(this,to).catch(err=>err)
+    }
 export default router;

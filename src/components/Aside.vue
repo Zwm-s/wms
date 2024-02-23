@@ -5,18 +5,19 @@
       default-active="/Home"
       :collapse="isCollapse"
       :collapse-transition="false"
+      router
   >
-    <el-menu-item index="/Home">
+    <el-menu-item index="/Home" >
       <i class="el-icon-s-home"></i>
       <span slot="title">首页</span>
     </el-menu-item>
-    <el-menu-item index="/One">
+    <el-menu-item index="/Admin">
       <i class="el-icon-star-on"></i>
-      <span slot="title">导航一</span>
+      <span slot="title">用户管理</span>
     </el-menu-item>
-    <el-menu-item index="/Two">
+    <el-menu-item index="/STM">
       <i class="el-icon-star-on"></i>
-      <span slot="title">导航二</span>
+      <span slot="title">仓库管理</span>
     </el-menu-item>
   </el-menu>
 </template>

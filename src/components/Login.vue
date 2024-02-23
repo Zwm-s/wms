@@ -44,6 +44,8 @@
 
 <script>
 
+  import service from "@/axios/request";
+
   export default {
     name: "LogIn",
     data() {
@@ -68,11 +70,15 @@
         this.confirm_disabled = true;
         this.$refs.loginForm.validate((valid) => {
           if (valid) { //valid成功为true, 失败为false//去后台验证用户名密码
-            this.$axios.post(this.$httpUrl+'/login', this.loginForm).then(res => res.data).then(res => {
+            this.$axios.post(this.$httpUrl+'/login', this.loginForm).then(res => res.data).then(async res => {
               console.log(res)
-              if (res.code === 1) {//存储
-                sessionStorage.setItem("CurUser", JSON.stringify(res.data))//跳转到主页
-                this.$router.replace('/index');
+              if (res.code === 1) {
+                //存储token和user
+                sessionStorage.setItem("curUser", JSON.stringify(res.data.name))
+                //JSON.stringify(res.data.key)
+                sessionStorage.setItem("token", JSON.stringify(res.data.token))
+                //路由跳转
+                await this.$router.replace('/index');
               } else {
                 this.confirm_disabled = false;
                 alert('校验失败，用户名或密码错误!');

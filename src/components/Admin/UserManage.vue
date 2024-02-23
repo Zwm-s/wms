@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div style="margin-bottom: 5px;">
+  <div style="padding: 5px">
+    <div style="margin-bottom: 5px;margin-left: 250px" >
       <el-input v-model="name" placeholder="请输入名字...." style="width: 200px;" suffix-icon="el-icon-search"
                 @keyup.enter.native="loadGetp"
       ></el-input>
-      <el-select v-model="sex" filterable placeholder="请输入性别...." style="margin-left: 5px;">
+      <el-select v-model="sex" filterable placeholder="请输入性别...." style="margin-left: 15px;">
         <el-option
             v-for="item in sexs"
             :key="item.value"
@@ -12,9 +12,9 @@
             :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="success" style="margin-left: 5px" @click="loadGetp">查询</el-button>
-      <el-button type="info" style="margin-left: 5px" @click="resertParam">重置</el-button>
-      <el-button type="primary" style="margin-left: 5px" @click="addUser">新增</el-button>
+      <el-button type="success" style="margin-left: 15px" @click="loadGetp">查询</el-button>
+      <el-button type="info" style="margin-left: 15px" @click="resertParam">重置</el-button>
+      <el-button type="primary" style="margin-left: 15px" @click="addUser">新增</el-button>
     </div>
 
     <el-table :data="tableData" style="height: 100%;"
@@ -32,7 +32,7 @@
         <template v-slot:default="scope">
           <el-tag
               :type="scope.row.sex ===1 ? 'primary' : 'success'"
-              disable-transitions>{{ scope.row.sex == 1 ? '男' : '女' }}
+              disable-transitions>{{ scope.row.sex === 1 ? '男' : '女' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -49,17 +49,16 @@
       </el-table-column>
       <el-table-column prop="" label="操作">
         <template v-slot:default="scope">
-        <el-button size="small" type="primary" @click="mod(scope.row)">编辑</el-button>
+          <el-button size="small" type="primary" @click="mod(scope.row)">编辑</el-button>
           <el-popconfirm
               title="确定删除该用户吗？"
               @confirm="del(scope.row.id)"
           >
-        <el-button slot='reference' size="small" type="danger" style="margin-left: 5px">删除</el-button>
+            <el-button slot='reference' size="small" type="danger" style="margin-left: 5px">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
-
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -67,7 +66,9 @@
         :page-sizes="[5,8,10,15]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
+        :total="total"
+        style="margin-left: 380px;position: absolute; bottom: 0;"
+    >
     </el-pagination>
 
     <el-dialog
@@ -306,7 +307,7 @@ export default {
       this.$axios.get(this.$httpUrl + '/users/list').then(res => res.data).then(
           res => {
             console.log(res)
-            if (res.code == 1) {
+            if (res.code === 1) {
               //this.tableData = res.data
             } else {
               alert("获取数据失败")
@@ -338,8 +339,6 @@ export default {
     }
   },
   beforeMount() {
-    this.loadGetl();
-    this.loadPost();
     this.loadGetp();
   }
 }

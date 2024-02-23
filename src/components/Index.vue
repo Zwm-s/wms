@@ -5,12 +5,12 @@
     </el-aside>
 
     <el-container style="height: 100%;">
-      <el-header style="height: 10%;text-align: right; font-size: 15px;border-bottom: #c7d0d5 1px solid">
+      <el-header style="height: 8%;text-align: right; font-size: 15px;border-bottom: #c7d0d5 1px solid">
         <HeaDer @doCollapse="doCollapse" :icon="icon"></HeaDer>
       </el-header>
 
-      <el-main style="height: 90%;">
-        <MaIn></MaIn>
+      <el-main style="height: 92%;padding: 0px">
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -19,11 +19,9 @@
 <script>
 import Aside from "@/components/Aside.vue";
 import HeaDer from "@/components/Header.vue";
-import MaIn from "@/components/Main.vue";
-
 export default {
   name: "InDex",
-  components: {MaIn, HeaDer, Aside},
+  components: { HeaDer, Aside},
   data(){
     return{
       isCollapse:false,
@@ -42,6 +40,9 @@ export default {
         this.icon='el-icon-s-unfold'
       }
     }
+  },
+  created() {
+    this.$router.push("/Home")
   }
 }
 </script>
