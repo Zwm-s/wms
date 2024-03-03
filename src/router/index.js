@@ -27,6 +27,22 @@ const routes=[
                     title: '用户管理'
                 },
                 component:()=>import("../components/Admin/UserManage.vue")
+            },
+            {
+                path:'/STM',
+                name:'/STM',
+                meta: {
+                    title: '仓库管理'
+                },
+                component:()=>import("../components/User/StorageManage.vue")
+            },
+            {
+                path:'/ItM',
+                name:'/ItM',
+                meta: {
+                    title: '仓库物品管理'
+                },
+                component:()=>import("../components/User/ItemManage.vue")
             }
         ]
     }

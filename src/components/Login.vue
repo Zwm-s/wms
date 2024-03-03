@@ -77,6 +77,8 @@
                 sessionStorage.setItem("curUser", JSON.stringify(res.data.name))
                 //JSON.stringify(res.data.key)
                 sessionStorage.setItem("token", JSON.stringify(res.data.token))
+                //存储id
+                sessionStorage.setItem("curId",JSON.stringify(res.data.id))
                 //路由跳转
                 await this.$router.replace('/index');
               } else {

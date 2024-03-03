@@ -1,5 +1,6 @@
 <template>
   <div style="padding: 5px">
+<!--    顶部搜索框-->
     <div style="margin-bottom: 5px;margin-left: 250px" >
       <el-input v-model="name" placeholder="请输入名字...." style="width: 200px;" suffix-icon="el-icon-search"
                 @keyup.enter.native="loadGetp"
@@ -16,7 +17,7 @@
       <el-button type="info" style="margin-left: 15px" @click="resertParam">重置</el-button>
       <el-button type="primary" style="margin-left: 15px" @click="addUser">新增</el-button>
     </div>
-
+<!--用户展示表-->
     <el-table :data="tableData" style="height: 100%;"
               :header-cell-style="{background:'#f3f6fd',color:'#555'}"
               border>
@@ -59,18 +60,19 @@
         </template>
       </el-table-column>
     </el-table>
+<!--    底部页面选择-->
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageNum"
-        :page-sizes="[5,8,10,15]"
+        :page-sizes="[8,10,12,15]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-        style="margin-left: 380px;position: absolute; bottom: 0;"
+        style="margin-left: 380px;position: absolute; bottom: 0;margin-bottom: 5px;"
     >
     </el-pagination>
-
+<!--新增用户提示框-->
     <el-dialog
         title="提示"
         :visible.sync="centerDialogVisible"
@@ -132,7 +134,7 @@ export default {
       if(this.form.id){
         return callback();
       }
-      this.$axios.get(this.$httpUrl + '/users/findByN?number='+this.form.number).then(res=>res.data).then(
+      this.$axios.get(this.$httpUrl + '/users/findByNum?number='+this.form.number).then(res=>res.data).then(
           res=>{
             if(res.code===1){
               callback();
@@ -144,7 +146,7 @@ export default {
     };
     return {
       tableData: [],
-      pageSize: 5,
+      pageSize: 8,
       pageNum: 1,
       total: 1,
       name: '',
