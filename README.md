@@ -3,7 +3,7 @@
 set on **2024.2.21**
 
 + 一个前后端分离项目的前端部分，实现仓库以及相应人员管理管理
-+ 后端地址：[](https://github.com/Zwm-s/Warehouse_management_system)
++ [后端地址](https://github.com/Zwm-s/Warehouse_management_system)
 
 
 # 主要技术使用：
