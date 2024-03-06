@@ -39,7 +39,7 @@
                   <div>
                     <el-row :gutter="20" style="width: 350px;">
                       <el-col span="10">
-                        <h3 class="item-name" style="margin-top: 5px;font-size:35px;">{{ card.name }}</h3>
+                        <h3 class="item-name" style="margin-top: 5px;font-size:25 px;">{{ card.name }}</h3>
                       </el-col>
                       <el-col span="5" style="padding: 0">
                         <el-button style="width: 35px;height: 35px;margin: 5px;padding: 0;float: right"  size="medium"  @click="changeItem(card.id,card.name,card.instruction)">

@@ -8,7 +8,7 @@
     </div>
     <!--    显示用户名字，去掉"-->
     <el-col :span="8" style="width: 35px;height: 35px ;margin-right: 15px;margin-top: 10px;" >
-      <el-avatar :size="35" :src='require("@/assets/images/QCF.png")'  ></el-avatar>
+      <el-avatar :size="35" :src='getImage()'  ></el-avatar>
     </el-col>
     <span>{{userName.replace(/"/g,'')}}</span>
   <el-dropdown>
@@ -23,17 +23,36 @@
 
 
 <script>
+import {store} from "core-js/internals/reflect-metadata";
+
 export default {
   name: "HeaDer",
   data(){
     return {
-      userName :sessionStorage.getItem('curUser')
+      userName :sessionStorage.getItem('curUser'),
+      userImage:'',
+      userId:'',
     }
   },
   props:{
     icon:String
   },
   methods:{
+    getImage() {
+      return require(`@/assets/images/${this.userImage}`);
+    },
+    loadImage(){
+      this.userId= sessionStorage.getItem('curId').replace(/"/g,'')
+      this.$axios.get(this.$httpUrl + '/users/findImageById?id='+this.userId).then(res => res.data).then(
+          res => {
+            if (res.code === 1) {
+              this.userImage=res.data+'.png';
+              console.log(this.userImage)
+            } else {
+              alert("获取数据失败")
+            }
+          })
+    },
     toUser(){
       console.log("to_user")
       this.$router.push("/Home")
@@ -44,14 +63,25 @@ export default {
         type: 'warning',
         center:true
       })
-      .then(()=>{
-        this.$message({
-          type:'success',
-          message:'您已经退出登录成功'
-        })
-        this.$router.push("/")
-        sessionStorage.clear();
-      }).catch(()=>{
+          .then(()=>{
+            this.$axios.get(this.$httpUrl + '/logout?id='+this.userId).then(res => res.data).then(
+                res => {
+                  if (res.code === 1) {
+                    this.$message({
+                      type: 'success',
+                      message: '您已经退出登录'
+                    })
+                    this.$router.push("/")
+                    sessionStorage.clear();
+                  } else {
+                    this.$message({
+                      type: 'danger',
+                      message: '退出登录失败，请稍后再试'
+                    })
+                  }
+                }
+            )
+          }).catch(()=>{
         this.$message({
           type:'info',
           message:'已取消退出登录'
@@ -60,11 +90,14 @@ export default {
     },
     collapse(){
       this.$emit('doCollapse')
-    }
-  }
+    },
+  },
+  beforeMount() {
+    this.loadImage();
+    console.log(this.userImage)
+  },
 }
 </script>
-
 
 <style scoped>
 

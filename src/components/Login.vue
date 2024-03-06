@@ -50,6 +50,7 @@
     name: "LogIn",
     data() {
       return {
+        userImage:'',
         confirm_disabled: false,
         loginForm: {
           number: '',
@@ -79,6 +80,8 @@
                 sessionStorage.setItem("token", JSON.stringify(res.data.token))
                 //存储id
                 sessionStorage.setItem("curId",JSON.stringify(res.data.id))
+                //存储Image
+                this.getImage(res.data.id)
                 //路由跳转
                 await this.$router.replace('/index');
               } else {
@@ -93,7 +96,35 @@
             return false;
           }
         });
-      }
+      },
+      getImage(userId){
+        this.$axios.get(this.$httpUrl + '/users/findImageById?id='+userId).then(res => res.data).then(
+            res => {
+              if (res.code === 1) {
+                switch (res.data){
+                  case '泉此方':
+                    this.userImage='QCF.png'
+                    break
+                  case '柊镜':
+                    this.userImage='ZJ.png'
+                    break
+                  case '柊司':
+                    this.userImage='ZS.png'
+                    break
+                  case '高良美幸':
+                    this.userImage='GLMX.png'
+                    break
+                  default:
+                    this.userImage='YH.png';
+                    break
+                }
+                sessionStorage.setItem('userImage',this.userImage);
+                console.log(this.userImage)
+              } else {
+                alert("获取数据失败")
+              }
+            })
+      },
     }
   }
 </script>

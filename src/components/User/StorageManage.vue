@@ -28,7 +28,7 @@
                 style="width: 15px;height: 15px; object-fit: contain;"
                 alt=""/>
           </el-button>
-          <el-button type="danger" style="width: 5%;height: 35%;margin-left: 10px;padding: 0;"  size="small"  @click="deleteWareHouse(card.id)" plain>
+          <el-button  style="width: 5%;height: 35%;margin-left: 10px;padding: 0;"  size="small"  @click="deleteWareHouse(card.id)" >
             <img
                 src="../../assets/icon/delete.png"
                 style="width: 15px;height: 15px; object-fit: contain;"
