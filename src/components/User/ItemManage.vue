@@ -22,38 +22,43 @@
       </div>
       <!--物品列表-->
       <el-row :gutter="20" style="width: 100%;height: 100%;">
-        <el-col :span="12" v-for="(card, index) in cards" :key="index">
-          <el-card class="item-card" :body-style="{ padding: '0px' }" style="margin: 10px;height: 250px;">
+        <el-col :span="6" v-for="(card, index) in cards" :key="index">
+          <el-card class="item-card" :body-style="{ padding: '0px' }" style="margin: 10px;height: 400px;">
             <div>
-              <el-row style="flex-direction: row;height: 100%;width: 100%;" :gutter="20">
-                <el-col span="10" style="width: 50%">
-                <!-- 物品图片 -->
-                  <el-image :src="require('@/assets/images/QCF.png')"  fit="cover" class="item-image">
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline"></i>
+              <el-row style="flex-direction: row;height: 100%;width: 100%;margin-left: 0PX;" :gutter="20">
+                <el-col span="24" style="width: 100%;padding: 0px;">
+                <!--懒加载-->
+                  <div class="demo-image__lazy">
+                  <!-- 物品图片 -->
+                  <el-image :src="card.image"  fit="cover" class="item-image" style="height: 250px;width: 100%;:">
+                    <div slot="placeholder" class="image-slot">
+                      <span class="dot" style="width: 100%;height: 250px;;" >
+                        <i class="el-icon-loading" style="height: 250px;;width: 100%;"></i>
+                      </span>
                     </div>
                   </el-image>
+                  </div>
                 </el-col>
-                <el-col span="12" >
+                <el-col span="20" >
                 <!-- 物品名称 -->
                   <div>
                     <el-row :gutter="20" style="width: 350px;">
                       <el-col span="10">
-                        <h3 class="item-name" style="margin-top: 5px;font-size:25 px;">{{ card.name }}</h3>
+                        <h3 class="item-name" style="margin-top: 5px;font-size:25px;">{{ card.name }}</h3>
                       </el-col>
                       <el-col span="5" style="padding: 0">
-                        <el-button style="width: 35px;height: 35px;margin: 5px;padding: 0;float: right"  size="medium"  @click="changeItem(card.id,card.name,card.instruction)">
+                        <el-button style="width: 25px;height: 25px;margin: 5px;padding: 0;float: right"  size="medium"  @click="changeItem(card.id,card.name,card.instruction)">
                           <img
                               src="../../assets/icon/edit.png"
-                              style="width: 30px;height: 30px; object-fit: contain;"
+                              style="width: 15px;height: 15px; object-fit: contain;"
                               alt=""/>
                         </el-button>
                       </el-col>
                       <el-col span="4" style="padding: 0;">
-                          <el-button  type="danger" style="width: 35px;height: 35px;margin: 5px;padding: 0;"  size="medium" @click="deleteItem(card.id)"  plain>
+                          <el-button style="width: 25px;height: 25px;margin: 5px;padding: 0;"  size="medium" @click="deleteItem(card.id)" >
                             <img
                                 src="../../assets/icon/delete.png"
-                                style="width: 30px;height: 30px; object-fit: contain;"
+                                style="width: 15px;height: 15px; object-fit: contain;"
                                 alt=""/>
                           </el-button>
                       </el-col>
@@ -67,14 +72,53 @@
           </el-card>
         </el-col>
       </el-row>
-    </div>
+    </div >
     <!--配置物品界面-->
     <el-dialog
         title="提示"
         :visible.sync="centerDialogVisible"
-        width="30%" style="border-radius: 30px;"
+        width="35%" style="border-radius: 30px;"
         center>
       <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+        <el-form-item label="物品图片" prop="name">
+          <el-col :span="20">
+            <el-upload
+                action="#"
+                :auto-upload="false"
+                :on-change="handleChange"
+                :on-remove="handleRemove"
+                :limit="1"
+                :file-list="fileList"
+                list-type="picture-card"
+            >
+              <i  slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{file}" style="width: 300px;">
+                <img
+                    class="el-upload-list__item-thumbnail"
+                    :src="file.url" alt=""
+                >
+                <span class="el-upload-list__item-actions">
+                <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                >
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove()"
+                >
+          <i class="el-icon-delete"></i>
+        </span>
+              </span>
+              </div>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+          </el-col>
+        </el-form-item>
         <el-form-item label="物品名称" prop="name">
           <el-col :span="20">
             <el-input v-model="form.name"></el-input>
@@ -84,14 +128,14 @@
           <el-col :span="20">
             <el-input type="textarea"
                       :autosize="{ minRows: 4, maxRows: 5}"
-                      placeholder="请输入仓库说明" v-model="form.instruction"></el-input>
+                      placeholder="请输入物品说明" v-model="form.instruction"></el-input>
           </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addConf">确 定</el-button>
-        </span>
+          <el-button :loading="addLoading" type="primary" @click="addConf">确 定</el-button>
+      </span>
     </el-dialog>
     <!-- 确认对话框 -->
     <el-dialog
@@ -114,6 +158,12 @@ export default {
   name: "ItemManage",
   data() {
     return {
+      addLoading:false,//上传加载
+      fileList:[],//图片文件列表
+      dialogImageUrl: '',//图片预览路径
+      dialogVisible: false,//图片预览选项
+      uploadFile: null,//要上传的图片
+      selectFile: null,//已选择图片
       whId:sessionStorage.getItem('whId'),
       itemId:'0',
       whName:'',
@@ -128,6 +178,7 @@ export default {
         whId:'0',
         name: '',
         instruction: '',
+        itemImage:null
       },
       //配置界面内容规则
       rules: {
@@ -144,11 +195,26 @@ export default {
     };
   },
   methods: {
+    //除去图片调用
+    handleRemove(){
+      this.fileList=[]
+    },
+    //上传图片后调用
+    handleChange(file){
+      this.selectFileFile=file
+      console.log(this.selectFileFile)
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     //改变Item
     changeItem(id,name,instruction){
       this.form.name=name;
       this.form.id=id;
       this.form.instruction=instruction;
+      this.fileList=[]
       this.centerDialogVisible = true
     },
     deleteItem(id){
@@ -216,10 +282,18 @@ export default {
     //重置配置表单内容
     resetForm(){
       this.$refs.form.resetFields();
+      this.fileList=[]
     },
     //确认添加或配置物品
     addConf(){
+
       this.$refs.form.validate((valid) => {
+        this.uploadFile=this.selectFileFile;
+        if(this.uploadFile == null){
+          this.$message.error("图片为空")
+          this.addLoading=false;
+          return false;
+        }
         if (valid) {
           if(this.form.id){
             this.update()
@@ -230,12 +304,27 @@ export default {
           console.log('error submit!!');
           return false;
         }
+        this.addLoading=false;
       });
     },
     //添加item
     save(){
+      this.addLoading=true;
       this.form.whId=this.whId;
-      this.$axios.post(this.$httpUrl + '/items/add', this.form).then(res => res.data).then(
+      this.form.itemImage=this.uploadFile;
+      // 创建 FormData 对象
+      const formData = new FormData();
+      // 将文件对象转换为 FormData 对象的一部分
+      formData.append("itemImage", this.form.itemImage.raw);
+      formData.append("name",this.form.name);
+      formData.append("whId",this.form.whId);
+      formData.append("instruction",this.form.instruction);
+      console.log(formData)
+      this.$axios.post(this.$httpUrl + '/items/add',formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(res => res.data).then(
           res => {
             if (res.code === 1) {
               this.$message({
@@ -251,8 +340,18 @@ export default {
       )
     },
     update(){
+      this.addLoading=true;
       this.form.whId=this.whId;
-      this.$axios.post(this.$httpUrl + '/items/mod', this.form).then(res => res.data).then(
+      this.form.itemImage=this.uploadFile;
+      // 创建 FormData 对象
+      const formData = new FormData();
+      // 将文件对象转换为 FormData 对象的一部分
+      formData.append("itemImage", this.form.itemImage.raw);//注意上传部分一定是文件
+      formData.append("name",this.form.name);
+      formData.append("whId",this.form.whId);
+      formData.append("instruction",this.form.instruction);
+      formData.append("id",this.form.id);
+      this.$axios.post(this.$httpUrl + '/items/mod', formData).then(res => res.data).then(
           res => {
             if (res.code === 1) {
               this.$message({
